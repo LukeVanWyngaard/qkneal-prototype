@@ -1,11 +1,20 @@
-// checkListing.js
 const button = document.getElementById('checkBtn');
+const output = document.getElementById('output');
 
-button.addEventListener('click', () => {
-  const url = document.getElementById('urlInput').value;
+button.addEventListener('click', async () => {
+  const url = document.getElementById('urlInput').value.trim();
   if (!url) {
-    alert("Paste a URL first!");
+    output.innerText = "Enter a URL first!";
     return;
   }
-  alert("URL entered: " + url);
+
+  try {
+    // Try fetching the URL
+    const res = await fetch(url, { method: 'HEAD', mode: 'no-cors' });
+    // If no error thrown, we assume Active (we can't read the response due to Facebook)
+    output.innerText = "Status: Active";
+  } catch (err) {
+    // If fetch fails, we assume Not Found
+    output.innerText = "Status: Not Found";
+  }
 });
